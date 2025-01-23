@@ -116,7 +116,7 @@ def criando_turmas():
         nome_turma = request.form.get("nome")
         disciplinas_ids = request.form.getlist("disciplinas")
         
-        if verif_bdd.Turma(nome_turma):
+        if verif_bdd.verificar_turma(nome_turma):
             exibir_mensagem("erro","Essa turma já existe!")
             return redirect("/turmas")
 
