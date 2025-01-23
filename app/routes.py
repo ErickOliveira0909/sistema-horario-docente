@@ -128,7 +128,7 @@ def criando_turmas():
             turma.disciplinas.append(disciplina)
         
         db.session.commit()
-        exibir_mensagem("Turma criada com sucesso!","sucesso")
+        exibir_mensagem("sucesso","Turma criada com sucesso!")
         return redirect("/turmas")
 
 @main.route("/horarios")
