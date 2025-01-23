@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard do Professor</title>
+  <meta name="description" content="Dashboard para professores gerenciarem suas turmas, disciplinas e horários">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🏫</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body class="bg-gray-100">
+    {% with messages = get_flashed_messages(with_categories=true)%}
+      {% if messages %}
+        <div class="container mx-0 mt-0">
+          <div id="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash-message {{ category }}">
+                <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+{% endwith %}
+
+  <div id="app" class="min-h-screen">
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside class="w-64 min-h-screen bg-white border-r">
+        <div class="p-4 border-b">
+          <div class="h-12 flex items-center justify-center">
+            <img src="{{ url_for('static', filename='images/logo_preta.png') }}" alt="Logo do site" class="h-8">
+          </div>
+        </div>
+        <nav class="p-4">
+          <a href="/dashboard" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2 font-medium">Dashboard</a>
+          <a href="/disciplinas" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2">Disciplinas</a>
+          <a href="/turmas" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2">Turmas</a>
+        </nav>
+        <div class="absolute bottom-0 w-64 p-4">
+          <button class="w-full py-2 px-4 bg-red-50 text-red-600 rounded hover:bg-red-100">
+            <a href="/logout">Sair</a>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1">
+        <!-- Profile Header -->
+        <header class="bg-white p-6 border-b">
+          <div class="flex items-center">
+            <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+              <span class="text-2xl">👤</span>
+            </div>
+            <div class="ml-6">
+              <h1 class="text-xl font-semibold">{{session["professor_nome"]}}</h1>
+              <div class="flex gap-8 mt-2 text-gray-600">
+                <p>{{numero_disciplinas}} disciplinas</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Dashboard Cards -->
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-700">Disciplinas</h2>
+            <button
+              id="openAddModal"
+              class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+            >
+              Adicionar Disciplina
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for disciplina in disciplinas %}
+              <!-- Cada disciplina -->
+              <div
+                class="bg-white p-4 rounded-lg shadow cursor-pointer"
+                onclick="openEditModal('{{disciplina.id}}', '{{disciplina.nome}}', '{{disciplina.descricao}}')"
+              >
+                <h3 class="text-lg font-semibold text-gray-800">{{ disciplina.nome }}</h3>
+                <p class="text-gray-600 mt-1">{{ disciplina.descricao }}</p>
+              </div>
+            {% else %}
+              <!-- Mensagem de aviso -->
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-gray-800">AVISO</h3>
+                <p class="text-gray-600 mt-1">Nenhuma disciplina encontrada para este professor.</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal para Adicionar Disciplina -->
+  <div id="addModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-700">Adicionar Disciplina</h2>
+        <button id="closeAddModal" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+      </div>
+      <form action="/cadastrando_disciplina" method="POST">
+        <!-- Nome da Disciplina -->
+        <div class="mb-4">
+          <label for="nome" class="block text-sm font-medium text-gray-600">Nome da Disciplina</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Digite o nome da disciplina"
+            class="w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+
+        <!-- Descrição da Disciplina -->
+        <div class="mb-4">
+          <label for="descricao" class="block text-sm font-medium text-gray-600">Descrição da Disciplina</label>
+          <input
+            type="text"
+            id="descricao"
+            name="descricao"
+            placeholder="Digite a descrição da disciplina"
+            class="w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-between items-center">
+          <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300">
+            Salvar
+          </button>
+          <button type="button" id="cancelAdd" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para Editar Disciplina -->
+  <div id="editModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-700">Editar Disciplina</h2>
+        <button id="closeEditModal" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+      </div>
+      <form id="editForm" method="POST">
+        <!-- Nome da Disciplina -->
+        <div class="mb-4">
+          <label for="editNome" class="block text-sm font-medium text-gray-600">Nome da Disciplina</label>
+          <input
+            type="text"
+            id="editNome"
+            name="nome"
+            class="w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+
+        <!-- Descrição da Disciplina -->
+        <div class="mb-4">
+          <label for="editDescricao" class="block text-sm font-medium text-gray-600">Descrição da Disciplina</label>
+          <input
+            type="text"
+            id="editDescricao"
+            name="descricao"
+            class="w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-between items-center">
+          <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300">
+            Salvar Alterações
+          </button>
+          <button type="button" id="deleteDisciplina" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+            Apagar
+          </button>
+          <button type="button" id="cancelEdit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-gray-600 transition duration-300">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+   // Seletores de elementos
+const addModal = document.getElementById("addModal");
+const editModal = document.getElementById("editModal");
+const openAddModalBtn = document.getElementById("openAddModal");
+const closeAddModalBtn = document.getElementById("closeAddModal");
+const closeEditModalBtn = document.getElementById("closeEditModal");
+const cancelAddBtn = document.getElementById("cancelAdd");
+const cancelEditBtn = document.getElementById("cancelEdit");
+const deleteDisciplinaBtn = document.getElementById("deleteDisciplina");
+
+// Inputs do formulário de edição
+const editNomeInput = document.getElementById("editNome");
+const editDescricaoInput = document.getElementById("editDescricao");
+
+// Variável global para rastrear a disciplina atual
+let disciplinaAtualId = null;
+
+// Função para abrir o modal de adicionar disciplina
+openAddModalBtn?.addEventListener("click", () => {
+  addModal.classList.remove("hidden");
+});
+
+// Função para fechar o modal de adicionar disciplina
+const closeAddModal = () => {
+  addModal.classList.add("hidden");
+};
+closeAddModalBtn?.addEventListener("click", closeAddModal);
+cancelAddBtn?.addEventListener("click", closeAddModal);
+
+// Função para abrir o modal de edição com dados da disciplina
+function openEditModal(id, nome, descricao) {
+  disciplinaAtualId = id; // Define o ID da disciplina atual
+  editNomeInput.value = nome;
+  editDescricaoInput.value = descricao;
+  editModal.classList.remove("hidden");
+}
+
+// Função para fechar o modal de edição
+const closeEditModal = () => {
+  editModal.classList.add("hidden");
+};
+closeEditModalBtn?.addEventListener("click", closeEditModal);
+cancelEditBtn?.addEventListener("click", closeEditModal);
+
+// Função para apagar uma disciplina (simulado)
+deleteDisciplinaBtn?.addEventListener("click", () => {
+  if (confirm("Tem certeza de que deseja apagar esta disciplina?")) {
+    console.log(`Disciplina com ID ${disciplinaAtualId} apagada.`);
+    
+    dados = {
+      id:disciplinaAtualId
+    }
+    fetch("/apagar_disciplina", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    });
+    closeEditModal();
+    location.reload(); // Recarregar a página para refletir as alterações
+    location.reload(); // Recarregar a página para refletir as alterações
+  }
+});
+
+// Enviar alterações ao backend (JSON)
+document.getElementById("editForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault(); // Impede o envio padrão do formulário
+
+  const nome = editNomeInput.value;
+  const descricao = editDescricaoInput.value;
+
+  // Preparar os dados para envio
+  const dadosDisciplina = {
+    id: disciplinaAtualId,
+    nome: nome,
+    descricao: descricao,
+  };
+
+  try {
+    // Enviar os dados via fetch
+    const response = await fetch("/editar_disciplina", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosDisciplina),
+    });
+
+    if (response.ok) {
+      
+      location.reload(); // Recarregar a página para refletir as alterações
+    } else {
+      const error = await response.json();
+      alert(`Erro ao atualizar a disciplina: ${error.message}`);
+    }
+  } catch (error) {
+    console.error("Erro na solicitação:", error);
+    alert("Erro ao enviar os dados.");
+  }
+
+  closeEditModal();
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Disciplina</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Botão para abrir o modal -->
+  <div class="flex justify-center items-center min-h-screen">
+    <button
+      id="openModal"
+      class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+    >
+      Cadastrar Disciplina
+    </button>
+  </div>
+
+  <!-- Modal (inicialmente oculto) -->
+  <div
+    id="modal"
+    class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden"
+  >
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-700">Cadastrar Disciplina</h2>
+        <button
+          id="closeModal"
+          class="text-gray-500 hover:text-gray-800"
+        >
+          &times;
+        </button>
+      </div>
+      <form action="/cadastrar_disciplina" method="POST">
+        <!-- Nome da Disciplina -->
+        <div class="mb-4">
+          <label for="nome" class="block text-sm font-medium text-gray-600">Nome da Disciplina</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Digite o nome da disciplina"
+            class="w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+        </div>
+        <!-- Botões -->
+        <div class="flex justify-between items-center">
+          <button
+            type="button"
+            onclick="CadastrarDisciplina()"
+            class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300"
+          >
+            Salvar
+          </button>
+          <button
+            type="button"
+            id="closeModal2"
+            class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Seleciona os elementos do modal
+    const openModal = document.getElementById('openModal');
+    const closeModal = document.getElementById('closeModal');
+    const closeModal2 = document.getElementById('closeModal2');
+    const modal = document.getElementById('modal');
+
+    // Abre o modal
+    openModal.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
+
+    // Fecha o modal
+    const close = () => modal.classList.add('hidden');
+    closeModal.addEventListener('click', close);
+    closeModal2.addEventListener('click', close);
+
+    // Fecha o modal ao clicar fora do conteúdo
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) close();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Sistema de Horário Docente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white">
+    <div class="container mx-auto flex flex-wrap justify-between items-center p-5">
+        <div class="h-12 flex items-center justify-center">
+            <img src="{{ url_for('static', filename='images/logo_branca.png') }}" alt="Logo do site" class="h-8">
+        </div>
+      <button class="block md:hidden text-white focus:outline-none" id="menu-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+      <nav class="hidden md:flex w-full md:w-auto" id="menu">
+        <ul class="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto">
+          <li><a href="/" class="block py-2 md:py-0 hover:underline">Home</a></li>
+          <li><a href="/login" class="block py-2 md:py-0 hover:underline">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gray-200">
+    <div class="container mx-auto text-center py-16 px-5">
+      <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Bem-vindo ao Sistema de Horário Docente</h2>
+      <p class="text-lg text-gray-700 mb-6">Organize e gerencie horários de professores, disciplinas e turmas de forma eficiente.</p>
+      <a href="/cadastro_professores" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Começar Agora</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="container mx-auto py-12 px-5">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Feature 1 -->
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <h3 class="text-2xl font-bold text-blue-600 mb-3">Cadastro de Professores</h3>
+        <p class="text-gray-700">Adicione e gerencie informações completas sobre os docentes.</p>
+      </div>
+      <!-- Feature 2 -->
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <h3 class="text-2xl font-bold text-blue-600 mb-3">Organização de Horários</h3>
+        <p class="text-gray-700">Crie e visualize horários de forma clara e interativa.</p>
+      </div>
+      <!-- Feature 3 -->
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <h3 class="text-2xl font-bold text-blue-600 mb-3">Controle de Acesso</h3>
+        <p class="text-gray-700">Defina permissões para diferentes usuários do sistema.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Info Section -->
+  <section class="bg-blue-600 text-white">
+    <div class="container mx-auto py-10 px-5">
+      <h3 class="text-2xl font-bold text-center mb-6">Por que usar nosso sistema?</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h4 class="text-xl font-bold mb-2">Agilidade</h4>
+          <p>Reduza o tempo necessário para organizar e gerenciar os horários acadêmicos.</p>
+        </div>
+        <div>
+          <h4 class="text-xl font-bold mb-2">Eficiência</h4>
+          <p>Maximize o aproveitamento dos recursos educacionais disponíveis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-4">
+    <p>&copy; 2025 Sistema de Horário Docente. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- JavaScript para o menu responsivo -->
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+    menuBtn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

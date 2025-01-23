@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Professor</title>
+    <meta name="description" content="Dashboard para professores gerenciarem suas turmas, disciplinas e horários">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🏫</text></svg>">
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-100">
+    {% with messages = get_flashed_messages(with_categories=true)%}
+        {% if messages %}
+            <div class="container mx-0 mt-0">
+                <div id="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+    <div id="app" class="min-h-screen">
+        <div class="flex">
+            <!-- Sidebar -->
+            <aside class="w-64 min-h-screen bg-white border-r">
+                <div class="p-4 border-b">
+                    <div class="h-12 flex items-center justify-center">
+                        <img src="{{ url_for('static', filename='images/logo_preta.png') }}" alt="Logo do site" class="h-8">
+                    </div>
+                </div>
+                <nav class="p-4">
+                    <a href="/dashboard" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2 font-medium">Dashboard</a>
+                    <a href="/disciplinas" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2">Disciplinas</a>
+                    <a href="/turmas" class="block py-2 px-4 rounded hover:bg-gray-100 mb-2">Turmas</a>
+                    
+                </nav>
+                <div class="absolute bottom-0 w-64 p-4">
+                    <button @click="logout" class="w-full py-2 px-4 bg-red-50 text-red-600 rounded hover:bg-red-100">
+                        <a href="/logout">Sair</a>
+                        
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1">
+                <!-- Profile Header -->
+                <header class="bg-white p-6 border-b">
+                    <div class="flex items-center">
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                            <span class="text-2xl">👤</span>
+                        </div>
+                        <div class="ml-6">
+                            <h1 class="text-xl font-semibold">{{session["professor_nome"]}}</h1>
+                            <div class="flex gap-8 mt-2 text-gray-600">
+                                <p>{{numero_disciplinas}} disciplinas</p>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Dashboard Cards -->
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="/disciplinas" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+                        <h2 class="text-lg font-semibold mb-2">Disciplinas</h2>
+                        <p class="text-gray-600">Acesse suas disciplinas</p>
+                    </a>
+                    
+                    <a href="/turmas" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+                        <h2 class="text-lg font-semibold mb-2">Turmas</h2>
+                        <p class="text-gray-600">Gerencie suas turmas</p>
+                    </a>
+                    
+                    <a href="/horarios" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+                        <h2 class="text-lg font-semibold mb-2">Horários</h2>
+                        <p class="text-gray-600">Visualize seus horários</p>
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
