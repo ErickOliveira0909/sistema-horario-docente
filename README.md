@@ -1,6 +1,12 @@
 # 🧑‍🏫 Sistema de Horário Docente
 
-Este é um sistema completo para a **organização de horários docentes**, desenvolvido com foco em clareza, escalabilidade e uso educacional, seguindo uma abordagem didática inspirada no estilo do **Gustavo Guanabara**.
+Este é um sistema completo para a **organização de horários docentes**, desenvolvido com foco em clareza, escalabilidade e uso educacional, seguindo uma abordagem didática.
+
+## 🌐 Acesso ao Site
+
+Você pode acessar a versão hospedada do sistema aqui:  
+👉 [**Clique para acessar o sistema**](https://edutime-twhk.onrender.com/)  
+
 
 ## 📌 Objetivo
 
@@ -22,11 +28,3 @@ Organizar os horários de professores, disciplinas, turmas e recursos acadêmico
 - 🔒 Sistema de login com diferentes permissões (admin, professor, etc.)
 - 📊 Painel interativo e centralizado
 - 🧠 Estrutura modular e fácil de entender
-
-## 🧪 Status do Projeto
-
-🚧 **Em desenvolvimento didático por etapas.**  
-Cada parte do projeto é explicada de forma detalhada, como em um curso, para facilitar o aprendizado e a colaboração.
-
-## 📂 Estrutura do Projeto
-
